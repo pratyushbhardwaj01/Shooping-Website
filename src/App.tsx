@@ -4,16 +4,15 @@ import { Footer, Header } from "./components";
 
 function App() {
   return (
-    <main>
-      <section>
-        <Header />
-      </section>
-      <section id="detail">
-        <Outlet />
-      </section>
-      <section>
-        <Footer />
-      </section>
+    <main className="w-full h-full ">
+      <Header />
+      <main className="relative">
+        <div className="pt-[69px]" />
+        <section id="detail">
+          <Outlet />
+        </section>
+      </main>
+      <Footer />
     </main>
   );
 }

@@ -1,374 +1,108 @@
+import { useMemo, useState } from "react";
+import { Filters } from "../../components";
 import Card from "../../components/Card/Card";
+import useProduct from "../../hooks/useProduct";
+import { FilterType, KeyType, ProductType } from "../../types/types";
+import {
+  rangeFilter,
+  splitValues,
+  stringFilter,
+} from "../../utils/ProductFilter";
 
-const data = [
-  {
-    id: 1,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-polo-men.png",
-    name: "Black Polo",
-    type: "Polo",
-    price: 250,
-    currency: "INR",
-    color: "Black",
-    gender: "Men",
-    quantity: 3,
-  },
-  {
-    id: 2,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/blue-polo-women.png",
-    name: "Blue Polo",
-    type: "Polo",
-    price: 350,
-    currency: "INR",
-    color: "Blue",
-    gender: "Women",
-    quantity: 3,
-  },
-  {
-    id: 3,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/pink-polo-women.png",
-    name: "Pink Polo",
-    type: "Polo",
-    price: 350,
-    currency: "INR",
-    color: "Pink",
-    gender: "Women",
-    quantity: 6,
-  },
-  {
-    id: 4,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-hoodie-men.png",
-    name: "Black Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Black",
-    gender: "Men",
-    quantity: 2,
-  },
-  {
-    id: 5,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/green-polo-men.png",
-    name: "Green Polo",
-    type: "Polo",
-    price: 250,
-    currency: "INR",
-    color: "Green",
-    gender: "Men",
-    quantity: 1,
-  },
-  {
-    id: 6,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/green-polo-women.png",
-    name: "Green Polo",
-    type: "Polo",
-    price: 350,
-    currency: "INR",
-    color: "Green",
-    gender: "Women",
-    quantity: 1,
-  },
-  {
-    id: 7,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/blue-hoodie-women.png",
-    name: "Blue Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Blue",
-    gender: "Women",
-    quantity: 2,
-  },
-  {
-    id: 8,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-hoodie-women.png",
-    name: "Black Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Black",
-    gender: "Women",
-    quantity: 5,
-  },
-  {
-    id: 9,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/blue-round-men.png",
-    name: "Blue Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Blue",
-    gender: "Men",
-    quantity: 2,
-  },
-  {
-    id: 10,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/red-round-women.png",
-    name: "Red Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Red",
-    gender: "Women",
-    quantity: 2,
-  },
-  {
-    id: 11,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/grey-round-men.png",
-    name: "Grey Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Grey",
-    gender: "Men",
-    quantity: 1,
-  },
-  {
-    id: 12,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/purple-hoodie-women.png",
-    name: "Purple Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Purple",
-    gender: "Women",
-    quantity: 3,
-  },
-  {
-    id: 13,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/grey-round-women.png",
-    name: "Grey Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Grey",
-    gender: "Women",
-    quantity: 1,
-  },
-  {
-    id: 14,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/white-round-women.png",
-    name: "White Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "White",
-    gender: "Women",
-    quantity: 0,
-  },
-  {
-    id: 15,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-round-men.png",
-    name: "Black Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Black",
-    gender: "Men",
-    quantity: 7,
-  },
-  {
-    id: 16,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/purple-round-men.png",
-    name: "Purple Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Purple",
-    gender: "Men",
-    quantity: 1,
-  },
-  {
-    id: 17,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/white-round-men.png",
-    name: "White Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "White",
-    gender: "Men",
-    quantity: 2,
-  },
-  {
-    id: 18,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/blue-round-women.png",
-    name: "Blue Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Blue",
-    gender: "Women",
-    quantity: 3,
-  },
-  {
-    id: 19,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/yellow-hoodie-women.png",
-    name: "Yellow Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Yellow",
-    gender: "Women",
-    quantity: 1,
-  },
-  {
-    id: 20,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/white-polo-women.png",
-    name: "White Polo",
-    type: "Polo",
-    price: 350,
-    currency: "INR",
-    color: "White",
-    gender: "Women",
-    quantity: 4,
-  },
-  {
-    id: 21,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/red-polo-men.png",
-    name: "Red Polo",
-    type: "Polo",
-    price: 250,
-    currency: "INR",
-    color: "Red",
-    gender: "Men",
-    quantity: 2,
-  },
-  {
-    id: 22,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/blue-hoodie-men.png",
-    name: "Blue Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Blue",
-    gender: "Men",
-    quantity: 0,
-  },
-  {
-    id: 23,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/grey-hoodie-men.png",
-    name: "Grey Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "Grey",
-    gender: "Men",
-    quantity: 2,
-  },
-  {
-    id: 24,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/grey-polo-men.png",
-    name: "Grey Polo",
-    type: "Polo",
-    price: 300,
-    currency: "INR",
-    color: "Grey",
-    gender: "Men",
-    quantity: 3,
-  },
-  {
-    id: 25,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/red-hoodie-men.png",
-    name: "Red Hoodie",
-    type: "Hoodie",
-    price: 300,
-    currency: "INR",
-    color: "Red",
-    gender: "Men",
-    quantity: 0,
-  },
-  {
-    id: 26,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/white-polo-men.png",
-    name: "White Polo",
-    type: "Polo",
-    price: 300,
-    currency: "INR",
-    color: "White",
-    gender: "Men",
-    quantity: 1,
-  },
-  {
-    id: 27,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/white-hoodie-women.png",
-    name: "White Hoodie",
-    type: "Hoodie",
-    price: 500,
-    currency: "INR",
-    color: "White",
-    gender: "Women",
-    quantity: 3,
-  },
-  {
-    id: 28,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/grey-round-men.png",
-    name: "Grey Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Grey",
-    gender: "Men",
-    quantity: 0,
-  },
-  {
-    id: 29,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-round-women.png",
-    name: "Black Round",
-    type: "Basic",
-    price: 300,
-    currency: "INR",
-    color: "Black",
-    gender: "Women",
-    quantity: 0,
-  },
-  {
-    id: 30,
-    imageURL:
-      "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/black-polo-women.png",
-    name: "Black Polo",
-    type: "Polo",
-    price: 300,
-    currency: "INR",
-    color: "Black",
-    gender: "Women",
-    quantity: 4,
-  },
-];
+const defaultFiltersValue: FilterType = {
+  color: [],
+  type: [],
+  gender: [],
+  price: [],
+};
 
 export const ProductPage = () => {
+  const { productsInfo, cartItems, addToCart, deleteFromCart } = useProduct();
+  const [filters, setSelectedFilters] =
+    useState<FilterType>(defaultFiltersValue);
+
+  function updateFilter(filterArray: string[], value: string) {
+    const isFound = filterArray.find((item) => item === value);
+    if (isFound) {
+      return filterArray.filter((item) => item !== value);
+    }
+    return [...filterArray, value];
+  }
+
+  function handleFilterClick(filterType: string, value: string) {
+    const filterStateCopy = { ...filters };
+    const { color, type, gender, price } = filterStateCopy;
+    if (filterType === "color") {
+      filterStateCopy.color = updateFilter(color, value);
+    } else if (filterType === "type") {
+      filterStateCopy.type = updateFilter(type, value);
+    } else if (filterType === "gender") {
+      filterStateCopy.gender = updateFilter(gender, value);
+    } else {
+      filterStateCopy.price = updateFilter(price, value);
+    }
+    setSelectedFilters(filterStateCopy);
+  }
+
+  function getUpdatedProductList(
+    filters: FilterType,
+    productsInfo: ProductType[]
+  ) {
+    let productsList: ProductType[] = [];
+    if (filters.color.length !== 0) {
+      productsList = stringFilter(productsInfo, filters.color, "color");
+    }
+    if (filters.gender.length !== 0) {
+      productsList = productsList.length === 0 ? productsInfo : productsList;
+      productsList = stringFilter(productsList, filters.gender, "gender");
+    }
+    if (filters.type.length !== 0) {
+      productsList = productsList.length === 0 ? productsInfo : productsList;
+
+      productsList = stringFilter(productsList, filters.type, "type");
+    }
+    if (filters.price.length !== 0) {
+      productsList = productsList.length === 0 ? productsInfo : productsList;
+      const splitRange = splitValues(filters.price);
+      productsList = rangeFilter(productsList, splitRange);
+    }
+    return productsList;
+  }
+
+  const filteredProductsList = useMemo(() => {
+    return getUpdatedProductList(filters, productsInfo);
+  }, [filters, productsInfo]);
+
+  const isFiltersSelected = Object.keys(filters).some(
+    (key: string) => filters[key as KeyType].length !== 0
+  );
+
+  const productsList = isFiltersSelected ? filteredProductsList : productsInfo;
+
   return (
-    <div className="p-[15px]">
-      <div className="h-[calc(100vh-150px)] overflow-scroll scroll-smooth grid grid-cols-2 md:grid-cols-3  gap-[10px] ">
-        {data.map((item) => {
-          return <Card itemInfo={item} />;
+    <div className="p-[15px] flex md:gap-10 gap-3  ">
+      <div className="md:flex-[1_1_10%]  bg-slate-300 md:p-[15px] ">
+        <Filters onFilterClick={handleFilterClick} />
+      </div>
+
+      <div
+        className=" md:flex-[1_1_90%]  h-[calc(100vh-120px)] overflow-scroll scroll-smooth grid  grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-[10px] 
+      "
+      >
+        {productsList.map((item) => {
+          return (
+            <Card
+              itemInfo={item}
+              isAdded={!!cartItems[item.id]}
+              cnt={cartItems[item.id]}
+              addItem={(id: number) => {
+                addToCart(id);
+              }}
+              removeItem={(id: number) => {
+                deleteFromCart(id);
+              }}
+            />
+          );
         })}
       </div>
     </div>

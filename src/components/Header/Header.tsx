@@ -1,13 +1,22 @@
-import { SearchBar } from "..";
-import { CartIcon } from "../../assests";
+import { useNavigate } from "react-router-dom";
+import { CartIcon, FlipkartIcon } from "../../assests";
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-around p-[10px]  bg-blue">
-      <div className="text-sm md:text-3xl text-slate-50">Tee Rex Store</div>
-      <SearchBar />
-      <CartIcon className="text-white md:text-5xl  text-3xl" />
-    </div>
+    <section className="flex items-center justify-between p-[10px] md:px-[20px] absolute  bg-blue w-[100%] z-50">
+      <div className="text-sm md:text-3xl text-slate-50 cursor-pointer">
+        <img
+          className="h-full w-[30px]"
+          src={FlipkartIcon}
+          onClick={() => navigate("/")}
+        />
+      </div>
+      <CartIcon
+        className="text-white md:text-5xl cursor-pointer  text-3xl "
+        onClick={() => navigate("/cart")}
+      />
+    </section>
   );
 };
 
