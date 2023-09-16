@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { Filters } from "../../components";
+import { Filters, SearchBar } from "../../components";
 import Card from "../../components/Card/Card";
 import useProduct from "../../hooks/useProduct";
 import { FilterType, KeyType, ProductType } from "../../types/types";
 import {
+  getListOnSearch,
   rangeFilter,
   splitValues,
   stringFilter,
@@ -18,6 +19,7 @@ const defaultFiltersValue: FilterType = {
 
 export const ProductPage = () => {
   const { productsInfo, cartItems, addToCart, deleteFromCart } = useProduct();
+  const [searchkeyword, setSearchKeyword] = useState<string[]>([]);
   const [filters, setSelectedFilters] =
     useState<FilterType>(defaultFiltersValue);
 
@@ -70,40 +72,70 @@ export const ProductPage = () => {
   }
 
   const filteredProductsList = useMemo(() => {
-    return getUpdatedProductList(filters, productsInfo);
-  }, [filters, productsInfo]);
+    const list1 = getUpdatedProductList(filters, productsInfo);
+    const list2 = list1.length !== 0 ? list1 : productsInfo;
+    return getListOnSearch(list2, searchkeyword);
+  }, [filters, productsInfo, searchkeyword]);
 
   const isFiltersSelected = Object.keys(filters).some(
     (key: string) => filters[key as KeyType].length !== 0
   );
 
-  const productsList = isFiltersSelected ? filteredProductsList : productsInfo;
+  const productsList =
+    isFiltersSelected || searchkeyword.length !== 0
+      ? filteredProductsList
+      : productsInfo;
+
+  const [filterOpen, setfilterOpen] = useState(false);
+
+  function handleChange(text: string) {
+    console.log("text", text);
+    const splitText = text.split(" ");
+    setSearchKeyword(splitText);
+  }
 
   return (
-    <div className="p-[15px] flex md:gap-10 gap-3  ">
-      <div className="md:flex-[1_1_10%]  bg-slate-300 md:p-[15px] ">
-        <Filters onFilterClick={handleFilterClick} />
+    <div className="p-2 flex gap-5">
+      <div
+        className={
+          "absolute transition-all md:static top-0 bottom-0 bg-white z-50 md:block min-w-[200px] border p-4 rounded-md shadow-md md:h-[90vh]" +
+          " " +
+          (filterOpen ? " left-0" : "-left-full")
+        }
+      >
+        <Filters
+          onClose={() => setfilterOpen(false)}
+          onFilterClick={handleFilterClick}
+        />
       </div>
 
-      <div
-        className=" md:flex-[1_1_90%]  h-[calc(100vh-120px)] overflow-scroll scroll-smooth grid  grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-[10px] 
-      "
-      >
-        {productsList.map((item) => {
-          return (
-            <Card
-              itemInfo={item}
-              isAdded={!!cartItems[item.id]}
-              cnt={cartItems[item.id]}
-              addItem={(id: number) => {
-                addToCart(id);
-              }}
-              removeItem={(id: number) => {
-                deleteFromCart(id);
-              }}
-            />
-          );
-        })}
+      <div className="grow">
+        <div className="mb-4">
+          <SearchBar onChange={handleChange} />
+          {/* <button onClick={ () => setfilterOpen(true)}>fiter</button> */}
+        </div>
+        <div className="h-[calc(100vh-120px)] overflow-scroll scroll-smooth">
+          <div
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-[10px] 
+        "
+          >
+            {productsList.map((item) => {
+              return (
+                <Card
+                  itemInfo={item}
+                  isAdded={!!cartItems[item.id]}
+                  cnt={cartItems[item.id]}
+                  addItem={(id: number) => {
+                    addToCart(id);
+                  }}
+                  removeItem={(id: number) => {
+                    deleteFromCart(id);
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

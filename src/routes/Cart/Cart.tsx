@@ -10,7 +10,7 @@ export const Cart = () => {
   return (
     <div className="p-[20px]">
       <div>Shoopping Cart</div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 max-w-md mx-auto">
         {selectedProducts.map((item) => {
           return <List productInfo={item} cnt={cartItems[item.id]} />;
         })}

@@ -25,3 +25,5 @@ export interface FilterType {
   price: string[];
   type: string[];
 }
+
+export type EntryType = "Inc" | "Dec";

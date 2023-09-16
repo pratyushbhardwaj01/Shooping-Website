@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./App.css";
-import { Footer, Header } from "./components";
+import { Header } from "./components";
 
 function App() {
   return (
@@ -12,7 +12,6 @@ function App() {
           <Outlet />
         </section>
       </main>
-      <Footer />
     </main>
   );
 }

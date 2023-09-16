@@ -1,5 +1,5 @@
 import React from "react";
-import { ProductType } from "../../types/types";
+import { EntryType, ProductType } from "../../types/types";
 
 interface CardProps {
   itemInfo: ProductType;
@@ -8,7 +8,7 @@ interface CardProps {
   addItem: (id: number) => void;
   removeItem: (id: number) => void;
 }
-type EntryType = "Inc" | "Dec";
+
 const Card: React.FC<CardProps> = ({
   itemInfo,
   isAdded,
@@ -24,31 +24,33 @@ const Card: React.FC<CardProps> = ({
     }
   }
   return (
-    <div className="max-w-[300px] w-full p-[10px] bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700">
-      <img
-        className="rounded-t-lg lg:h-[200px] lg:w-[200px]   m-auto  object-cover "
-        src={itemInfo.imageURL}
-        alt=""
-      />
+    <div className="p-[10px] bg-white border border-gray-200 rounded-lg shadow-md">
+      <div className="p-2 md:p-4 flex justify-center items-center">
+        <img
+          className="rounded-t-lg h-[100px] md:h-[200px] object-contain"
+          src={itemInfo.imageURL}
+          alt=""
+        />
+      </div>
       <div className="m-[10px]">
-        <h5 className="mb-2 md:text-xl text-sm font-bold tracking-tight text-gray-900 dark:text-white">
+        <h5 className="mb-2 md:text-xl text-sm font-bold tracking-tight text-gray-900">
           {itemInfo.name}
         </h5>
-        <div className="mb-3  flex items-center justify-between  font-normal text-gray-700 dark:text-gray-400">
-          <p className="md:text-xl text-sm text-left">{`${itemInfo.currency} ${itemInfo.price}`}</p>
-          <div className="flex w-[120px] h-[50px]   border-2 border-white">
+        <div className="mb-3 font-normal text-gray-700 ">
+          <p className="md:text-xl text-sm text-left mb-2">{`${itemInfo.currency} ${itemInfo.price}`}</p>
+          <div className="flex h-[40px] w-fit border-2 border-black rounded-md">
             {isAdded && (
-              <div className=" flex  h-full items-center">
+              <div className="flex items-center">
                 <button
                   onClick={() => handleClick(itemInfo.id, "Dec")}
-                  className="min-w-[40px]"
+                  className="min-w-[40px] font-bold border-r"
                 >
                   -
                 </button>
-                <p className="min-w-[20px] text-center">{cnt}</p>
+                <p className="min-w-[40px] text-center px-2">{cnt}</p>
                 <button
                   onClick={() => handleClick(itemInfo.id, "Inc")}
-                  className="min-w-[40px]"
+                  className="min-w-[40px] font-bold border-l"
                 >
                   +
                 </button>
@@ -57,7 +59,7 @@ const Card: React.FC<CardProps> = ({
             {!isAdded && (
               <button
                 onClick={() => handleClick(itemInfo.id, "Inc")}
-                className="bg-transparent w-full  hover:bg-blue-500 text-blue-700 font-sm hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
+                className="border-none hover:bg-blue-500 text-blue-700 font-sm py-1 px-4 border border-blue-500 hover:border-transparent rounded-md"
               >
                 Add to cart
               </button>

@@ -40,4 +40,19 @@ function stringFilter(
   });
 }
 
-export { rangeFilter, splitValues, stringFilter };
+function getListOnSearch(data: ProductType[], searchKeywords: string[]) {
+  console.log(searchKeywords, "searchKeywords");
+  const x = data.filter((item) => {
+    return searchKeywords.some((text) => {
+      return (
+        item.gender.toLowerCase().includes(text.toLowerCase()) ||
+        item.name.toLowerCase().includes(text.toLowerCase()) ||
+        item.color.toLowerCase().includes(text.toLowerCase())
+      );
+    });
+  });
+  console.log("datainside", x);
+  return x;
+}
+
+export { rangeFilter, splitValues, stringFilter, getListOnSearch };
