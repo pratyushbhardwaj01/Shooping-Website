@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SearchIcon } from "../../assests";
 
 interface SearchBarProps {
   onChange: (value: string) => void;
@@ -17,6 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onChange }) => {
         Search
       </label>
       <div className="relative w-full ">
+        <SearchIcon className="absolute top-3 left-3" />
         <input
           type="text"
           onChange={handleChange}

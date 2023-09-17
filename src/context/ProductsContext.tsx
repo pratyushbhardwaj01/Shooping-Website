@@ -12,11 +12,14 @@ interface ProductProviderProps {
 const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
   const [productsInfo, setProductsInfo] = useState<ProductType[]>([]);
   const [cartItems, setCardItems] = useState<Record<number, number>>({});
+  const [error, setError] = useState(false);
 
   function addToCart(id: number) {
     const copyState = { ...cartItems };
+    setError(false);
     const productInfo = productsInfo.find((item) => item.id === id);
     if (productInfo && copyState[id] + 1 > productInfo?.quantity) {
+      setError(true);
       return;
     }
 
@@ -30,6 +33,7 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
   }
 
   function deleteFromCart(id: number) {
+    setError(false);
     const copyState = { ...cartItems };
     if (copyState[id] === 0) {
       delete copyState[id];
@@ -50,6 +54,7 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
         addToCart,
         deleteFromCart,
         cartItems,
+        error,
       }}
     >
       {children}

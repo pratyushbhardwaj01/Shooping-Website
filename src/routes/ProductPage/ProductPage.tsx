@@ -19,7 +19,8 @@ const defaultFiltersValue: FilterType = {
 };
 
 export const ProductPage = () => {
-  const { productsInfo, cartItems, addToCart, deleteFromCart } = useProduct();
+  const { productsInfo, cartItems, addToCart, deleteFromCart, error } =
+    useProduct();
   const [searchkeyword, setSearchKeyword] = useState<string[]>([]);
   const [filters, setSelectedFilters] =
     useState<FilterType>(defaultFiltersValue);
@@ -48,11 +49,6 @@ export const ProductPage = () => {
     setSelectedFilters(filterStateCopy);
   }
 
-  function clearFilter(filterType: KeyType) {
-    const filterStateCopy = { ...filters };
-    filterStateCopy[filterType] = [];
-    setSelectedFilters(filterStateCopy);
-  }
   const isFiltersSelected = Object.keys(filters).some(
     (key: string) => filters[key as KeyType].length !== 0
   );
@@ -104,7 +100,7 @@ export const ProductPage = () => {
   }
 
   return (
-    <div className="p-2 flex gap-5">
+    <div className="p-2 flex gap-5 m-2">
       <div
         className={
           "absolute transition-all md:static top-0 bottom-0 bg-white z-50 md:block min-w-[200px] border p-4 rounded-md shadow-md md:h-[90vh]" +
@@ -134,7 +130,7 @@ export const ProductPage = () => {
         />
       </div>
 
-      <div className="grow">
+      <div className="grow relative">
         <div className="mb-4">
           <SearchBar onChange={handleChange} />
           <FilterIcon
@@ -142,6 +138,7 @@ export const ProductPage = () => {
             onClick={() => setfilterOpen(true)}
           />
         </div>
+
         <div className="h-[calc(100vh-120px)] overflow-scroll scroll-smooth">
           <div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-[10px] 
@@ -165,6 +162,13 @@ export const ProductPage = () => {
           </div>
         </div>
       </div>
+      <p
+        className={`text-white bg-red-500 text-1xl px-10 py-2  w-fit rounded-md transition-all ease-in-out fixed left-full whitespace-nowrap   ${
+          error ? "-translate-x-[300px]" : "translate-x-0"
+        }`}
+      >
+        Can not add more item
+      </p>
     </div>
   );
 };

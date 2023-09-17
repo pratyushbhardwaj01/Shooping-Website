@@ -17,6 +17,7 @@ export interface ProductContextType {
   cartItems: Record<number, number>;
   addToCart: (id: number) => void;
   deleteFromCart: (id: number) => void;
+  error: boolean;
 }
 
 export interface FilterType {
