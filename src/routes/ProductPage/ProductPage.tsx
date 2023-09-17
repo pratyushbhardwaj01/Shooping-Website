@@ -9,6 +9,7 @@ import {
   splitValues,
   stringFilter,
 } from "../../utils/ProductFilter";
+import { FilterIcon } from "../../assests";
 
 const defaultFiltersValue: FilterType = {
   color: [],
@@ -43,8 +44,20 @@ export const ProductPage = () => {
     } else {
       filterStateCopy.price = updateFilter(price, value);
     }
+
+    console.log("filterUpdated", filterStateCopy);
+
     setSelectedFilters(filterStateCopy);
   }
+
+  function clearFilter(filterType: KeyType) {
+    const filterStateCopy = { ...filters };
+    filterStateCopy[filterType] = [];
+    setSelectedFilters(filterStateCopy);
+  }
+  const isFiltersSelected = Object.keys(filters).some(
+    (key: string) => filters[key as KeyType].length !== 0
+  );
 
   function getUpdatedProductList(
     filters: FilterType,
@@ -73,13 +86,12 @@ export const ProductPage = () => {
 
   const filteredProductsList = useMemo(() => {
     const list1 = getUpdatedProductList(filters, productsInfo);
-    const list2 = list1.length !== 0 ? list1 : productsInfo;
-    return getListOnSearch(list2, searchkeyword);
+    if (searchkeyword.length > 0) {
+      const list2 = isFiltersSelected ? list1 : productsInfo;
+      return getListOnSearch(list2, searchkeyword);
+    }
+    return list1;
   }, [filters, productsInfo, searchkeyword]);
-
-  const isFiltersSelected = Object.keys(filters).some(
-    (key: string) => filters[key as KeyType].length !== 0
-  );
 
   const productsList =
     isFiltersSelected || searchkeyword.length !== 0
@@ -106,20 +118,39 @@ export const ProductPage = () => {
         <Filters
           onClose={() => setfilterOpen(false)}
           onFilterClick={handleFilterClick}
+          // onClear=(())
+          appliedFilters={filters}
+          onRemove={(key: string) => {
+            setSelectedFilters((prevValue) => ({
+              ...prevValue,
+              [key]: [],
+            }));
+          }}
+          onClear={() =>
+            setSelectedFilters({
+              color: [],
+              price: [],
+              type: [],
+              gender: [],
+            })
+          }
         />
       </div>
 
       <div className="grow">
         <div className="mb-4">
           <SearchBar onChange={handleChange} />
-          {/* <button onClick={ () => setfilterOpen(true)}>fiter</button> */}
+          <FilterIcon
+            className="mt-2 md:hidden"
+            onClick={() => setfilterOpen(true)}
+          />
         </div>
         <div className="h-[calc(100vh-120px)] overflow-scroll scroll-smooth">
           <div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-[10px] 
         "
           >
-            {productsList.map((item) => {
+            {productsList?.map((item) => {
               return (
                 <Card
                   itemInfo={item}

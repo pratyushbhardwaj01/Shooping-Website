@@ -15,8 +15,17 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
 
   function addToCart(id: number) {
     const copyState = { ...cartItems };
-    copyState[id] =
-      copyState[id] === undefined ? 1 : (copyState[id] = copyState[id] + 1);
+    const productInfo = productsInfo.find((item) => item.id === id);
+    if (productInfo && copyState[id] + 1 > productInfo?.quantity) {
+      return;
+    }
+
+    if (copyState[id] === undefined) {
+      copyState[id] = 1;
+    } else {
+      copyState[id] = copyState[id] + 1;
+    }
+
     setCardItems(copyState);
   }
 

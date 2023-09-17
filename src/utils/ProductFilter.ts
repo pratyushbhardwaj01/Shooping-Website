@@ -41,7 +41,6 @@ function stringFilter(
 }
 
 function getListOnSearch(data: ProductType[], searchKeywords: string[]) {
-  console.log(searchKeywords, "searchKeywords");
   const x = data.filter((item) => {
     return searchKeywords.some((text) => {
       return (
