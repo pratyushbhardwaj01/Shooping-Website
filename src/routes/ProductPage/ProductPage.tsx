@@ -45,8 +45,6 @@ export const ProductPage = () => {
       filterStateCopy.price = updateFilter(price, value);
     }
 
-    console.log("filterUpdated", filterStateCopy);
-
     setSelectedFilters(filterStateCopy);
   }
 
@@ -101,7 +99,6 @@ export const ProductPage = () => {
   const [filterOpen, setfilterOpen] = useState(false);
 
   function handleChange(text: string) {
-    console.log("text", text);
     const splitText = text.split(" ");
     setSearchKeyword(splitText);
   }

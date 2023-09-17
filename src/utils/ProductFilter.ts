@@ -50,7 +50,7 @@ function getListOnSearch(data: ProductType[], searchKeywords: string[]) {
       );
     });
   });
-  console.log("datainside", x);
+
   return x;
 }
 
