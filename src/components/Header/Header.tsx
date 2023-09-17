@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { CartIcon, FlipkartIcon } from "../../assests";
+import { CartIcon } from "../../assests";
 import useProduct from "../../hooks/useProduct";
 
 const Header = () => {
