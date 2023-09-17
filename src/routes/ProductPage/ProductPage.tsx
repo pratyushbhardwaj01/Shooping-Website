@@ -20,7 +20,7 @@ const defaultFiltersValue: FilterType = {
 };
 
 export const ProductPage = () => {
-  const { productsInfo, cartItems, addItems, deleteFromCart, error } =
+  const { productsInfo, cartItems, addItems, removeItems, error } =
     useProduct();
   const [filterOpen, setfilterOpen] = useState(false);
   const [searchkeyword, setSearchKeyword] = useState<string[]>([]);
@@ -44,25 +44,21 @@ export const ProductPage = () => {
     filters: FilterType,
     productsInfo: ProductType[]
   ) {
-    let productsList: ProductType[] = [];
+    let productsList: ProductType[] = productsInfo;
+    Object.keys(filters).forEach((key: string) => {
+      if (key === "price") {
+        return productsList;
+      }
+      productsList = stringFilter(
+        productsList,
+        filters[key as FilterKeyType],
+        key as FilterKeyType
+      );
+    });
 
-    if (filters.color.length !== 0) {
-      productsList = stringFilter(productsInfo, filters.color, "color");
-    }
-    if (filters.gender.length !== 0) {
-      productsList = productsList.length === 0 ? productsInfo : productsList;
-      productsList = stringFilter(productsList, filters.gender, "gender");
-    }
-    if (filters.type.length !== 0) {
-      productsList = productsList.length === 0 ? productsInfo : productsList;
+    const splitRange = splitValues(filters.price);
+    productsList = rangeFilter(productsList, splitRange);
 
-      productsList = stringFilter(productsList, filters.type, "type");
-    }
-    if (filters.price.length !== 0) {
-      productsList = productsList.length === 0 ? productsInfo : productsList;
-      const splitRange = splitValues(filters.price);
-      productsList = rangeFilter(productsList, splitRange);
-    }
     return productsList;
   }
 
@@ -141,7 +137,7 @@ export const ProductPage = () => {
                     addItems(id);
                   }}
                   removeItem={(id: number) => {
-                    deleteFromCart(id);
+                    removeItems(id);
                   }}
                 />
               );

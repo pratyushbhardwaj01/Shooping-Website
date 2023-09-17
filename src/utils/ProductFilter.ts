@@ -4,6 +4,9 @@ function rangeFilter(
   data: ProductType[],
   filterValues: { min: number; max: number }[]
 ) {
+  if (filterValues.length === 0) {
+    return data;
+  }
   return data.filter((item) => {
     return filterValues.some(
       (filterValue) =>
@@ -41,6 +44,9 @@ function stringFilter(
   filterValues: string[],
   key: FilterKeyType
 ) {
+  if (filterValues.length === 0) {
+    return data;
+  }
   return data.filter((item) => {
     return filterValues.some((filterValue) => {
       return filterValue.toLowerCase() === item[key].toString().toLowerCase();
