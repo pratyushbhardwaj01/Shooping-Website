@@ -1,5 +1,5 @@
 import { FilterType } from "../../types/types";
-import CheckBox from "../CheckBox/CheckBox";
+import CheckBox from "../checkBox/CheckBox";
 import { FiltersData } from "./FilterConfig";
 
 interface FiltersPropType {
