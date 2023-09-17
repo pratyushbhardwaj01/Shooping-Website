@@ -1,4 +1,4 @@
-import { ProductType } from "../types/types";
+import { FilterKeyType, ProductType } from "../types/types";
 
 function rangeFilter(
   data: ProductType[],
@@ -31,7 +31,7 @@ function splitValues(data: string[]) {
 function stringFilter(
   data: ProductType[],
   filterValues: string[],
-  key: KeyType
+  key: FilterKeyType
 ) {
   return data.filter((item) => {
     return filterValues.some((filterValue) => {

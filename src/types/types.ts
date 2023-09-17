@@ -10,7 +10,7 @@ export interface ProductType {
   quantity: number;
 }
 
-export type KeyType = "color" | "price" | "gender" | "type";
+export type FilterKeyType = "color" | "price" | "gender" | "type";
 
 export interface ProductContextType {
   productsInfo: ProductType[];

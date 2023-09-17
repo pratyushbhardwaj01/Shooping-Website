@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Filters, SearchBar } from "../../components";
 import Card from "../../components/Card/Card";
 import useProduct from "../../hooks/useProduct";
-import { FilterType, KeyType, ProductType } from "../../types/types";
+import { FilterKeyType, FilterType, ProductType } from "../../types/types";
 import {
   getListOnSearch,
   rangeFilter,
@@ -50,7 +50,7 @@ export const ProductPage = () => {
   }
 
   const isFiltersSelected = Object.keys(filters).some(
-    (key: string) => filters[key as KeyType].length !== 0
+    (key) => filters[key as FilterKeyType].length !== 0
   );
 
   function getUpdatedProductList(
@@ -148,6 +148,7 @@ export const ProductPage = () => {
               return (
                 <Card
                   itemInfo={item}
+                  key={item.id}
                   isAdded={!!cartItems[item.id]}
                   cnt={cartItems[item.id]}
                   addItem={(id: number) => {
