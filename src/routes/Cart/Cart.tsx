@@ -10,10 +10,6 @@ export const Cart = () => {
 
   const isSelectedItems = Object.keys(cartItems).length !== 0;
 
-  function handleDelete(id: number) {
-    deleteFromCart(id);
-  }
-
   const selectedProductsInfo: ProductType[] = productsInfo.filter((item) => {
     return !!cartItems[item.id];
   });
@@ -32,7 +28,7 @@ export const Cart = () => {
               <List
                 productInfo={item}
                 cnt={cartItems[item.id]}
-                onDelete={handleDelete}
+                onDelete={(id: number) => deleteFromCart(id)}
               />
             );
           })}

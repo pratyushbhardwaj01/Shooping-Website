@@ -8,6 +8,7 @@ import {
   rangeFilter,
   splitValues,
   stringFilter,
+  updateFilter,
 } from "../../utils/ProductFilter";
 import { FilterIcon } from "../../assests";
 
@@ -19,33 +20,19 @@ const defaultFiltersValue: FilterType = {
 };
 
 export const ProductPage = () => {
-  const { productsInfo, cartItems, addToCart, deleteFromCart, error } =
+  const { productsInfo, cartItems, addItems, deleteFromCart, error } =
     useProduct();
+  const [filterOpen, setfilterOpen] = useState(false);
   const [searchkeyword, setSearchKeyword] = useState<string[]>([]);
   const [filters, setSelectedFilters] =
     useState<FilterType>(defaultFiltersValue);
 
-  function updateFilter(filterArray: string[], value: string) {
-    const isFound = filterArray.find((item) => item === value);
-    if (isFound) {
-      return filterArray.filter((item) => item !== value);
-    }
-    return [...filterArray, value];
-  }
-
   function handleFilterClick(filterType: string, value: string) {
     const filterStateCopy = { ...filters };
-    const { color, type, gender, price } = filterStateCopy;
-    if (filterType === "color") {
-      filterStateCopy.color = updateFilter(color, value);
-    } else if (filterType === "type") {
-      filterStateCopy.type = updateFilter(type, value);
-    } else if (filterType === "gender") {
-      filterStateCopy.gender = updateFilter(gender, value);
-    } else {
-      filterStateCopy.price = updateFilter(price, value);
-    }
-
+    filterStateCopy[filterType as FilterKeyType] = updateFilter(
+      filterStateCopy[filterType as FilterKeyType],
+      value
+    );
     setSelectedFilters(filterStateCopy);
   }
 
@@ -58,6 +45,7 @@ export const ProductPage = () => {
     productsInfo: ProductType[]
   ) {
     let productsList: ProductType[] = [];
+
     if (filters.color.length !== 0) {
       productsList = stringFilter(productsInfo, filters.color, "color");
     }
@@ -91,8 +79,6 @@ export const ProductPage = () => {
     isFiltersSelected || searchkeyword.length !== 0
       ? filteredProductsList
       : productsInfo;
-
-  const [filterOpen, setfilterOpen] = useState(false);
 
   function handleChange(text: string) {
     const splitText = text.split(" ");
@@ -152,7 +138,7 @@ export const ProductPage = () => {
                   isAdded={!!cartItems[item.id]}
                   cnt={cartItems[item.id]}
                   addItem={(id: number) => {
-                    addToCart(id);
+                    addItems(id);
                   }}
                   removeItem={(id: number) => {
                     deleteFromCart(id);

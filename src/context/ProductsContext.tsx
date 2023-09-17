@@ -14,7 +14,7 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
   const [cartItems, setCardItems] = useState<Record<number, number>>({});
   const [error, setError] = useState(false);
 
-  function addToCart(id: number) {
+  function addItems(id: number) {
     const copyState = { ...cartItems };
     setError(false);
     const productInfo = productsInfo.find((item) => item.id === id);
@@ -32,7 +32,7 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
     setCardItems(copyState);
   }
 
-  function deleteFromCart(id: number) {
+  function removeItems(id: number) {
     setError(false);
     const copyState = { ...cartItems };
     if (copyState[id] === 0) {
@@ -40,6 +40,12 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
     } else {
       copyState[id] = copyState[id] - 1;
     }
+    setCardItems(copyState);
+  }
+
+  function deleteFromCart(id: number) {
+    const copyState = { ...cartItems };
+    delete copyState[id];
     setCardItems(copyState);
   }
 
@@ -51,7 +57,8 @@ const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
     <ProductContext.Provider
       value={{
         productsInfo,
-        addToCart,
+        addItems,
+        removeItems,
         deleteFromCart,
         cartItems,
         error,

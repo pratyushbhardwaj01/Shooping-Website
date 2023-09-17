@@ -15,7 +15,8 @@ export type FilterKeyType = "color" | "price" | "gender" | "type";
 export interface ProductContextType {
   productsInfo: ProductType[];
   cartItems: Record<number, number>;
-  addToCart: (id: number) => void;
+  addItems: (id: number) => void;
+  removeItems: (id: number) => void;
   deleteFromCart: (id: number) => void;
   error: boolean;
 }

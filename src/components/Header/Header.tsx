@@ -9,10 +9,7 @@ const Header = () => {
   return (
     <section className="flex items-center justify-between px-4 py-4 md:px-[50px] absolute  bg-gray-100 w-[100%] z-50">
       <div className="text-sm md:text-3xl text-black cursor-pointer">
-        <NavLink to="/">
-          {/* <img className="h-full w-[30px]" src={FlipkartIcon} /> */}
-          My Shop
-        </NavLink>
+        <NavLink to="/">My Shop</NavLink>
       </div>
       <div className="flex items-center gap-4 text-black">
         <NavLink

@@ -12,6 +12,14 @@ function rangeFilter(
   });
 }
 
+function updateFilter(filterArray: string[], value: string) {
+  const isFound = filterArray.find((item) => item === value);
+  if (isFound) {
+    return filterArray.filter((item) => item !== value);
+  }
+  return [...filterArray, value];
+}
+
 function splitValues(data: string[]) {
   return data.map((item) => {
     const arr = item.split("-");
@@ -54,4 +62,10 @@ function getListOnSearch(data: ProductType[], searchKeywords: string[]) {
   return x;
 }
 
-export { rangeFilter, splitValues, stringFilter, getListOnSearch };
+export {
+  rangeFilter,
+  splitValues,
+  stringFilter,
+  getListOnSearch,
+  updateFilter,
+};
